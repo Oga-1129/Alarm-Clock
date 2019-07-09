@@ -1,0 +1,178 @@
+@startuml
+
+Main_Activity <---> Prefecture_Activity
+Main_Activity <---> City_Activity
+Main_Activity <---> Alarm_Activity
+Alarm_Activity <---> Alarm_Receiver
+Alarm_Activity <---> Alarm_Service
+Alarm_Receiver ---> Alarm_Stop
+Main_Activity <---> Check_Activity
+
+
+Alarm_Stop ---> Weather_Activity
+
+Weather_Activity -> AsyncHttpWeather
+AsyncHttpWeather -> CallbackTask1
+CallbackTask1 -> Weather_Activity
+
+Weather_Activity ---> AsyncHttpMax
+AsyncHttpMax ---> CallBackTask2
+CallBackTask2 ---> Weather_Activity
+
+Weather_Activity ---> AsyncHttpMin
+CallbackTask3 ---> Weather_Activity
+AsyncHttpMin ---> CallbackTask3
+
+
+Weather_Activity  --------> Voice_Reading
+
+
+
+class Alarm_Receiver{
+    public void onReceive(Context context, Intent receivedIntent)
+}
+
+class Alarm_Service{
+    public IBinder onBind(Intent intent)
+}
+
+class Alarm_Stop{
+    private MediaPlayer mp
+    public void onCreate(Bundle savedInstanceState)
+    public void onStart()
+    public void onDestroy()
+    private  void stopAndRelease()
+    protected  void onResume()
+    public void onClick(View v)
+}
+
+class AsyncHttpWeather{
+private CallBackTask1 callBackTask1;
+protected void onPreExecute()
+protected String doInBackground(URL... urls)
+public void onPostExecute(String result)
+void setOnCallBack1(CallBackTask1 _cbj)
+}
+
+class Weather_Activity{
+    String URL
+    String voice_we
+    String voice_max
+    String voice_min
+    public static final String WEATHER_DATA= "weather"
+    public static final String MAX_DATA= "max"
+    public static final String MIN_DATA= "min"
+    protected void onCreate(Bundle savedInstanceState)
+}
+
+class AsyncHttpMax{
+    private CallBackTask2 callBackTask2
+    protected void onPreExecute()
+    protected String doInBackground(URL... urls)
+    public void onPostExecute(String result)
+    void setOnCallBack2(CallBackTask2 _cbj)
+}
+
+class AsyncHttpMin{
+    private CallBackTask3 callBackTask3
+    AsyncHttpMin()
+    protected void onPreExecute()
+    protected String doInBackground(URL... urls)
+    public void onPostExecute(String result)
+    void setOnCallBack3(CallBackTask3 _cbj)
+}
+
+class CallbackTask1{
+public  void CallBack1(String result)
+}
+
+class CallBackTask2{
+public  void CallBack2(String result)
+}
+
+class CallbackTask3{
+public  void CallBack3(String result)
+}
+
+class Voice_Reading{
+    private TextToSpeech tts
+    private static final String TAG = "TestTTS"
+    String v_data
+    String weather
+    String max
+    String min
+    protected void onCreate(Bundle savedInstanceState)
+    public void onInit(int status)
+    private void shutDown()
+    private void speechText(String v_data)
+    private void setSpeechRate()
+    private void setSpeechPitch()
+    private void setTtsListener()
+    protected void onDestroy()
+}
+
+class Main_Activity{
+    public static final int REQUEST_TIME = 0
+    public static final int REQUEST_PREFECTURE= 1
+    public static final int REQUEST_CITY= 2
+    public static final String PRE_NUM= "num"
+    public static final String HOUR_DATA= "0"
+    public static final String MIN_DATA= "1"
+    public static final String PREFECTURE_DATA= "2"
+    public static final String CITY_DATA = "3"
+    public static final String PLACE_KEY = "place_key"
+    String pre_str
+    String city_str
+    String save_pre
+    String pre_key
+    String city_key
+    String place_key
+    int pre_num
+    int hour
+    int min
+    protected void onCreate(Bundle savedInstanceState)
+    public void changeTime(int hour, int min)
+    public void changePrefecture(String str)
+    public void changeCity(String str)
+    public void onClick(View v)
+    protected  void onActivityResult(int requestCode, int resultCode, Intent intent)
+}
+
+class Alarm_Activity{
+    private InputMethodManager mInputMethodManager
+    private RelativeLayout mLayout
+    PendingIntent mAlarmSender
+    String place
+    int hour
+    int min
+    protected void onCreate(Bundle savedInstanceState)
+    public boolean onTouchEvent(MotionEvent event)
+    public void onClick(View v)
+    private PendingIntent getPendingIntent()
+}
+
+class Prefecture_Activity{
+    protected void onCreate(Bundle savedInstanceState)
+    public void onClick(View v)
+}
+
+class City_Activity{
+    int city_num
+    int num
+    String[] city_name
+    public void onCreate(Bundle saveInstanceState)
+    public void City(String str, int num)
+    public void onClick(View v)
+}
+
+class Check_Activity{
+protected void onCreate(Bundle savedInstanceState)
+public void changeTime2(int h, int m)
+public void changePre(String str)
+public void changeCity(String str)
+}
+
+
+
+
+@enduml
